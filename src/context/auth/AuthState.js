@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import axios from "axios";
+import axios from "../../utils/api";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
@@ -30,7 +30,7 @@ const AuthState = (props) => {
     setAuthToken(localStorage.token);
 
     try {
-      const res = await axios.get("/api/auth");
+      const res = await axios.get("/auth/me");
 
       dispatch({
         type: USER_LOADED,
@@ -75,7 +75,7 @@ const AuthState = (props) => {
     };
 
     try {
-      const res = await axios.post("/api/auth", formData, config);
+      const res = await axios.post("/auth/login", formData, config);
 
       dispatch({
         type: LOGIN_SUCCESS,
@@ -84,10 +84,18 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      dispatch({
-        type: LOGIN_FAIL,
-        payload: err.response.data.msg,
-      });
+      const errMsg = err.response;
+      if (errMsg) {
+        dispatch({
+          type: LOGIN_FAIL,
+          payload: errMsg.data.message,
+        });
+      } else {
+        dispatch({
+          type: LOGIN_FAIL,
+          payload: "Service is currently not available",
+        });
+      }
     }
   };
 

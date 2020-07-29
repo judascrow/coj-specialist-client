@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -10,14 +9,20 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import { useForm } from "react-hook-form";
+
+import TextFieldCT from "../shared/TextFieldCT";
+import HelperText from "../shared/HelperText";
 import logo from "../../assets/images/logo.svg";
+import AuthContext from "../../context/auth/authContext";
+import AlertContext from "../../context/alert/alertContext";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="https://www.coj.go.th/">
+        Court of Justice
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -45,8 +50,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+const Login = (props) => {
   const classes = useStyles();
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
+
+  const { setAlert } = alertContext;
+  const { login, error, clearErrors, isAuthenticated } = authContext;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/");
+    }
+    if (error) {
+      setAlert(error, "danger");
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, props.history]);
+
+  const { register, handleSubmit, errors } = useForm();
+
+  const onSubmit = (data) => {
+    login(data);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -56,28 +83,32 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           ระบบผู้เชี่ยวชาญ
         </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            id="username"
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextFieldCT
+            autoFocus
             label="Username"
             name="username"
             autoComplete="username"
-            autoFocus
-            size="small"
+            inputRef={register({ required: true })}
+            error={!!errors.username}
+            helperText={
+              errors.username && (
+                <HelperText>This field is required.</HelperText>
+              )
+            }
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="password"
-            label="Password"
+
+          <TextFieldCT
             type="password"
-            id="password"
-            autoComplete="current-password"
-            size="small"
+            label="Password"
+            name="password"
+            inputRef={register({ required: true })}
+            error={!!errors.password}
+            helperText={
+              errors.password && (
+                <HelperText>This field is required.</HelperText>
+              )
+            }
           />
           <Button
             type="submit"
@@ -107,4 +138,6 @@ export default function Login() {
       </Box>
     </Container>
   );
-}
+};
+
+export default Login;

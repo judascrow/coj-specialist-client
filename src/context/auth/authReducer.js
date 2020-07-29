@@ -10,20 +10,21 @@ import {
 } from "../types";
 
 export default (state, action) => {
-  switch (action.type) {
+  const { payload, type } = action;
+  switch (type) {
     case USER_LOADED:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: action.payload,
+        user: payload,
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("token", "Bearer " + payload.token);
       return {
         ...state,
-        ...action.payload,
+        ...payload,
         isAuthenticated: true,
         loading: false,
       };
@@ -38,7 +39,7 @@ export default (state, action) => {
         isAuthenticated: false,
         loading: false,
         user: null,
-        error: action.payload,
+        error: payload,
       };
     case CLEAR_ERRORS:
       return {
