@@ -182,7 +182,7 @@ export default function Navbar(props) {
           <div className={classes.grow} />
           {tabs}
           <span className={classes.userTitle}>
-            สวัสดีคุณ {user.data.username}
+            สวัสดีคุณ {user?.data?.username}
           </span>
           <div className={classes.sectionDesktop}>
             <IconButton
