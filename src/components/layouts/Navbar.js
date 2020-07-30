@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -9,6 +10,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import AuthContext from "../../context/auth/authContext";
 
@@ -39,9 +42,17 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  tabContainer: {
+    marginLeft: "auto",
+  },
+  tab: {
+    ...theme.typography.tab,
+    minWidth: 10,
+    marginLeft: "25px",
+  },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function Navbar(props) {
   const classes = useStyles();
 
   const authContext = useContext(AuthContext);
@@ -63,6 +74,52 @@ export default function PrimarySearchAppBar() {
   const handleLogout = () => {
     logout();
   };
+
+  const handleChange = (e, newValue) => {
+    props.setValue(newValue);
+  };
+
+  const routes = [
+    {
+      name: "Home",
+      link: "/",
+      activeIndex: 0,
+    },
+    {
+      name: "User",
+      link: "/user",
+      activeIndex: 2,
+    },
+    {
+      name: "Specialist",
+      link: "/specialist",
+      activeIndex: 3,
+    },
+  ];
+
+  const tabs = (
+    <Fragment>
+      <Tabs
+        value={props.value}
+        onChange={handleChange}
+        className={classes.tabContainer}
+        indicatorColor="primary"
+      >
+        {routes.map((route, index) => (
+          <Tab
+            key={`${route}${index}`}
+            className={classes.tab}
+            component={Link}
+            to={route.link}
+            label={route.name}
+            aria-owns={route.ariaOwns}
+            aria-haspopup={route.ariaPopup}
+            onMouseOver={route.mouseOver}
+          />
+        ))}
+      </Tabs>
+    </Fragment>
+  );
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -98,6 +155,7 @@ export default function PrimarySearchAppBar() {
             Material-UI
           </Typography>
           <div className={classes.grow} />
+          {tabs}
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"

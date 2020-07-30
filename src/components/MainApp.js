@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import PrivateRoute from "./routing/PrivateRoute";
@@ -23,14 +23,7 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar />
-      <CssBaseline />
       <Container fixed>
-        <Paper elevation={3}>
-          <Typography component="div" className={classes.root}>
-            <h1>Hello Home</h1>
-          </Typography>
-        </Paper>
         <Paper elevation={3}>
           <Typography component="div" className={classes.root}>
             <h1>Hello Home</h1>
@@ -41,9 +34,42 @@ const Home = () => {
   );
 };
 
+const User = () => {
+  const classes = useStyles();
+  return (
+    <div>
+      <Container fixed>
+        <Paper elevation={3}>
+          <Typography component="div" className={classes.root}>
+            <h1>Hello User</h1>
+          </Typography>
+        </Paper>
+      </Container>
+    </div>
+  );
+};
+
+const Specialist = () => {
+  const classes = useStyles();
+  return (
+    <div>
+      <Container fixed>
+        <Paper elevation={3}>
+          <Typography component="div" className={classes.root}>
+            <h1>Hello Specialist</h1>
+          </Typography>
+        </Paper>
+      </Container>
+    </div>
+  );
+};
+
 const MainApp = () => {
   const authContext = useContext(AuthContext);
-  const { loadUser } = authContext;
+  const { loadUser, isAuthenticated } = authContext;
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     loadUser();
@@ -54,8 +80,23 @@ const MainApp = () => {
     <Router>
       <Fragment>
         <Alert />
+        {isAuthenticated ? (
+          <div>
+            <Navbar
+              value={value}
+              setValue={setValue}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+            />
+            <CssBaseline />
+          </div>
+        ) : (
+          ""
+        )}
         <Switch>
           <PrivateRoute exact path="/" component={Home} />
+          <PrivateRoute exact path="/user" component={User} />
+          <PrivateRoute exact path="/specialist" component={Specialist} />
           <Route exact path="/login" component={Login} />
         </Switch>
       </Fragment>
