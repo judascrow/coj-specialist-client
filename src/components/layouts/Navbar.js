@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -7,11 +7,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+
+import logo from "../../assets/images/logo.svg";
 
 import AuthContext from "../../context/auth/authContext";
 
@@ -48,7 +49,14 @@ const useStyles = makeStyles((theme) => ({
   tab: {
     ...theme.typography.tab,
     minWidth: 10,
-    marginLeft: "25px",
+    marginLeft: "10px",
+    fontSize: "16px",
+  },
+  logo: {
+    height: "40px",
+  },
+  userTitle: {
+    marginLeft: "50px",
   },
 }));
 
@@ -57,7 +65,7 @@ export default function Navbar(props) {
 
   const authContext = useContext(AuthContext);
 
-  const { logout } = authContext;
+  const { logout, user } = authContext;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -81,21 +89,35 @@ export default function Navbar(props) {
 
   const routes = [
     {
-      name: "Home",
+      name: "หน้าหลัก",
       link: "/",
       activeIndex: 0,
     },
     {
-      name: "User",
+      name: "ผู้ใช้งาน",
       link: "/user",
-      activeIndex: 2,
+      activeIndex: 1,
     },
     {
-      name: "Specialist",
+      name: "ผู้เชี่ยวชาญ",
       link: "/specialist",
-      activeIndex: 3,
+      activeIndex: 2,
     },
   ];
+
+  useEffect(() => {
+    [...routes].forEach((route) => {
+      switch (window.location.pathname) {
+        case `${route.link}`:
+          if (props.value !== route.activeIndex) {
+            props.setValue(route.activeIndex);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  }, [props, routes]);
 
   const tabs = (
     <Fragment>
@@ -148,14 +170,20 @@ export default function Navbar(props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            component={Link}
+            to={"/"}
+            onClick={() => props.setValue(0)}
           >
-            <MenuIcon />
+            <img alt="company logo" className={classes.logo} src={logo} />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            ระบบผู้เชี่ยวชาญสำนักงานศาลยุติธรรม
           </Typography>
           <div className={classes.grow} />
           {tabs}
+          <span className={classes.userTitle}>
+            สวัสดีคุณ {user.data.username}
+          </span>
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
