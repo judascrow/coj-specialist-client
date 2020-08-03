@@ -7,14 +7,7 @@ import Alert from "./shared/Alert";
 import AuthContext from "../context/auth/authContext";
 
 import Home from "./home/Home";
-
-const User = () => {
-  return (
-    <div>
-      <h1>Hello User</h1>
-    </div>
-  );
-};
+import User from "./users/Index";
 
 const Specialist = () => {
   return (

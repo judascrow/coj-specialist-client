@@ -6,10 +6,13 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: theme.spacing(1),
+  container: {
+    flexGrow: 1,
+    // margin: theme.spacing(3),
+    // padding: theme.spacing(3),
   },
 }));
 
@@ -29,11 +32,12 @@ const Layout = (props) => {
       <CssBaseline />
       <Container fixed>
         <Paper elevation={3}>
-          <Typography component="div" className={classes.root}>
+          <Typography component="div" className={classes.container}>
             {props.children}
           </Typography>
         </Paper>
       </Container>
+      <Footer />
     </div>
   );
 };
