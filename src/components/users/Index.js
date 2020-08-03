@@ -38,7 +38,12 @@ const UserIndex = () => {
       <UserState>
         <UsersTable />
         <Tooltip title="เพิ่มผู้ใช้งาน" aria-label="Add">
-          <Fab component={Link} to="/" aria-label="Add" className={classes.fab}>
+          <Fab
+            component={Link}
+            to="/user/add"
+            aria-label="Add"
+            className={classes.fab}
+          >
             <AddIcon />
           </Fab>
         </Tooltip>

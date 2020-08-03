@@ -107,7 +107,8 @@ export default function Navbar(props) {
 
   useEffect(() => {
     [...routes].forEach((route) => {
-      switch (window.location.pathname) {
+      var pathArray = window.location.pathname.split("/");
+      switch ("/" + pathArray[1]) {
         case `${route.link}`:
           if (props.value !== route.activeIndex) {
             props.setValue(route.activeIndex);

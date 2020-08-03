@@ -13,7 +13,7 @@ import {
 
 const UserState = (props) => {
   const initialState = {
-    users: null,
+    users: [],
     current: null,
     filtered: null,
     error: null,
@@ -27,7 +27,6 @@ const UserState = (props) => {
 
     try {
       const res = await axios.get("/users");
-      console.log(res.data);
       dispatch({
         type: GET_USERS,
         payload: res.data.data,
@@ -42,24 +41,25 @@ const UserState = (props) => {
   };
 
   // Add Contact
-  const addUser = async (contact) => {
+  const addUser = async (user) => {
+    setAuthToken(localStorage.token);
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-
     try {
-      const res = await axios.post("/api/contacts", contact, config);
+      const res = await axios.post("/users", user, config);
 
       dispatch({
         type: ADD_USER,
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
+      const errMsg = err.response;
       dispatch({
         type: USER_ERROR,
-        payload: err.response.msg,
+        payload: errMsg?.message,
       });
     }
   };

@@ -144,7 +144,12 @@ const UsersTable = () => {
           title={TableTitle}
         />
       ) : (
-        <CircularProgress style={{ margin: "auto", display: "block" }} />
+        <CircularProgress
+          style={{
+            margin: "auto",
+            display: "block",
+          }}
+        />
       )}
     </div>
   );
