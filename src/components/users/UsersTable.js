@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import MaterialTable from "material-table";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -21,8 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UsersTable = () => {
+const UsersTable = (props) => {
   const classes = useStyles();
+  let history = useHistory();
   const userContext = useContext(UserContext);
   const { users, getUsers, loading, deleteUser } = userContext;
 
@@ -31,7 +33,9 @@ const UsersTable = () => {
     // eslint-disable-next-line
   }, []);
 
-  const onEdit = (rowData) => {};
+  const onEdit = (rowData) => {
+    history.push(`/user/${rowData.slug}/edit`);
+  };
 
   const onDelete = (rowData) => {
     deleteUser(rowData.slug);

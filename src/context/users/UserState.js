@@ -5,15 +5,18 @@ import userReducer from "./userReducer";
 import setAuthToken from "../../utils/setAuthToken";
 import {
   GET_USERS,
+  GET_USER,
   ADD_USER,
   DELETE_USER,
   UPDATE_USER,
   USER_ERROR,
+  CLEAR_CURRENT,
 } from "../types";
 
 const UserState = (props) => {
   const initialState = {
     users: [],
+    userData: {},
     current: null,
     filtered: null,
     error: null,
@@ -29,6 +32,24 @@ const UserState = (props) => {
       const res = await axios.get("/users");
       dispatch({
         type: GET_USERS,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      const errMsg = err.response;
+      dispatch({
+        type: USER_ERROR,
+        payload: errMsg?.message,
+      });
+    }
+  };
+
+  const getUser = async (slug) => {
+    setAuthToken(localStorage.token);
+
+    try {
+      const res = await axios.get(`/users/${slug}`);
+      dispatch({
+        type: GET_USER,
         payload: res.data.data,
       });
     } catch (err) {
@@ -83,7 +104,7 @@ const UserState = (props) => {
   };
 
   // Update Contact
-  const updateUser = async (contact) => {
+  const updateUser = async (slug, data) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -91,33 +112,38 @@ const UserState = (props) => {
     };
 
     try {
-      const res = await axios.put(
-        `/api/contacts/${contact._id}`,
-        contact,
-        config
-      );
+      const res = await axios.put(`/users/${slug}`, data, config);
 
       dispatch({
         type: UPDATE_USER,
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
+      const errMsg = err.response;
       dispatch({
         type: USER_ERROR,
-        payload: err.response.msg,
+        payload: errMsg?.message,
       });
     }
+  };
+
+  // Clear Current Contact
+  const clearCurrent = () => {
+    dispatch({ type: CLEAR_CURRENT });
   };
 
   return (
     <UserContext.Provider
       value={{
         users: state.users,
+        userData: state.userData,
         error: state.error,
         addUser,
         deleteUser,
         updateUser,
         getUsers,
+        getUser,
+        clearCurrent,
       }}
     >
       {props.children}

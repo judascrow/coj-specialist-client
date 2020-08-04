@@ -1,10 +1,12 @@
 import {
   GET_USERS,
+  GET_USER,
   ADD_USER,
   DELETE_USER,
   UPDATE_USER,
   USER_ERROR,
   CLEAR_USERS,
+  CLEAR_CURRENT,
 } from "../types";
 
 export default (state, action) => {
@@ -15,6 +17,7 @@ export default (state, action) => {
         ...state,
         users: payload,
         loading: false,
+        userData: {},
       };
     case ADD_USER:
       return {
@@ -22,12 +25,19 @@ export default (state, action) => {
         users: [payload, ...state.users],
         loading: false,
       };
+    case GET_USER:
+      return {
+        ...state,
+        userData: payload,
+        loading: false,
+      };
     case UPDATE_USER:
       return {
         ...state,
         users: state.users.map((user) =>
-          user._id === payload._id ? payload : user
+          user.slug === payload.slug ? payload : user
         ),
+        userData: payload,
         loading: false,
       };
     case DELETE_USER:
@@ -43,6 +53,11 @@ export default (state, action) => {
         filtered: null,
         error: null,
         current: null,
+      };
+    case CLEAR_CURRENT:
+      return {
+        ...state,
+        userData: null,
       };
     case USER_ERROR:
       return {

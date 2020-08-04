@@ -10,6 +10,7 @@ import UserState from "../context/users/UserState";
 import Home from "./home/Home";
 import User from "./users/Index";
 import UserAdd from "./users/UserAdd";
+import UserEdit from "./users/UserEdit";
 
 const Specialist = () => {
   return (
@@ -37,6 +38,7 @@ const MainApp = () => {
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/user" component={User} />
             <PrivateRoute exact path="/user/add" component={UserAdd} />
+            <PrivateRoute exact path="/user/:slug/edit" component={UserEdit} />
             <PrivateRoute exact path="/specialist" component={Specialist} />
             <Route exact path="/login" component={Login} />
           </Switch>
