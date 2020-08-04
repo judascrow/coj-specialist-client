@@ -92,16 +92,19 @@ export default function Navbar(props) {
       name: "หน้าหลัก",
       link: "/",
       activeIndex: 0,
+      role: 0,
     },
     {
       name: "ผู้ใช้งาน",
       link: "/user",
       activeIndex: 1,
+      role: 1,
     },
     {
       name: "ผู้เชี่ยวชาญ",
       link: "/specialist",
       activeIndex: 2,
+      role: 1,
     },
   ];
 
@@ -128,18 +131,22 @@ export default function Navbar(props) {
         className={classes.tabContainer}
         indicatorColor="primary"
       >
-        {routes.map((route, index) => (
-          <Tab
-            key={`${route}${index}`}
-            className={classes.tab}
-            component={Link}
-            to={route.link}
-            label={route.name}
-            aria-owns={route.ariaOwns}
-            aria-haspopup={route.ariaPopup}
-            onMouseOver={route.mouseOver}
-          />
-        ))}
+        {routes
+          .filter(
+            (r) => r.role === parseInt(user?.data?.roleId) || r.role === 0
+          )
+          .map((route, index) => (
+            <Tab
+              key={`${route}${index}`}
+              className={classes.tab}
+              component={Link}
+              to={route.link}
+              label={route.name}
+              aria-owns={route.ariaOwns}
+              aria-haspopup={route.ariaPopup}
+              onMouseOver={route.mouseOver}
+            />
+          ))}
       </Tabs>
     </Fragment>
   );
@@ -155,8 +162,8 @@ export default function Navbar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      <MenuItem onClick={handleMenuClose}>ตั้งค่า</MenuItem>
+      <MenuItem onClick={handleLogout}>ออกจากระบบ</MenuItem>
     </Menu>
   );
 

@@ -50,7 +50,7 @@ const AuthState = (props) => {
     };
 
     try {
-      const res = await axios.post("/api/users", formData, config);
+      const res = await axios.post("/auth/register", formData, config);
 
       dispatch({
         type: REGISTER_SUCCESS,
@@ -59,10 +59,18 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      dispatch({
-        type: REGISTER_FAIL,
-        payload: err.response.data.msg,
-      });
+      const errMsg = err.response;
+      if (errMsg) {
+        dispatch({
+          type: REGISTER_FAIL,
+          payload: errMsg.data.message,
+        });
+      } else {
+        dispatch({
+          type: REGISTER_FAIL,
+          payload: "Service is currently not available",
+        });
+      }
     }
   };
 

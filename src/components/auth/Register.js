@@ -4,7 +4,6 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-// import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -50,13 +49,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = (props) => {
+const Register = (props) => {
   const classes = useStyles();
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { login, error, clearErrors, isAuthenticated } = authContext;
+  const { error, clearErrors, isAuthenticated } = authContext;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -72,7 +71,8 @@ const Login = (props) => {
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = (data) => {
-    login(data);
+    console.log(data);
+    authContext.register(data);
   };
 
   return (
@@ -91,21 +91,74 @@ const Login = (props) => {
             autoComplete="username"
             inputRef={register({ required: true })}
             error={!!errors.username}
-            helperText={
-              errors.username && (
-                <HelperText>This field is required.</HelperText>
-              )
-            }
+            helperText={[
+              errors.username?.type === "required" && (
+                <HelperText key={1}>This field is required.</HelperText>
+              ),
+              errors.username?.type === "minLength" && (
+                <HelperText key={2}>ต้องมีอย่างน้อย 6 ตัวอักษร</HelperText>
+              ),
+              errors.username?.type === "maxLength" && (
+                <HelperText key={3}>ต้องมีไม่เกิน 20 ตัวอักษร</HelperText>
+              ),
+            ]}
           />
-
           <TextFieldCT
             type="password"
             label="Password"
             name="password"
             inputRef={register({ required: true })}
             error={!!errors.password}
+            helperText={[
+              errors.password?.type === "required" && (
+                <HelperText key={1}>This field is required.</HelperText>
+              ),
+              errors.password?.type === "minLength" && (
+                <HelperText key={2}>ต้องมีอย่างน้อย 6 ตัวอักษร</HelperText>
+              ),
+              errors.password?.type === "maxLength" && (
+                <HelperText key={3}>ต้องมีไม่เกิน 20 ตัวอักษร</HelperText>
+              ),
+            ]}
+          />
+          <TextFieldCT
+            label="Email"
+            name="email"
+            autoComplete="email"
+            inputRef={register({
+              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              required: true,
+            })}
+            error={!!errors.email}
+            helperText={[
+              errors.email?.type === "required" && (
+                <HelperText key={1}>This field is required.</HelperText>
+              ),
+              errors.email?.type === "pattern" && (
+                <HelperText key={2}>รูปแบบ Email ไม่ถูกต้อง</HelperText>
+              ),
+            ]}
+          />
+          <TextFieldCT
+            label="ชื่อ"
+            name="firstName"
+            autoComplete="firstName"
+            inputRef={register({ required: true })}
+            error={!!errors.firstName}
             helperText={
-              errors.password && (
+              errors.firstName && (
+                <HelperText>This field is required.</HelperText>
+              )
+            }
+          />
+          <TextFieldCT
+            label="นามสกุล"
+            name="lastName"
+            autoComplete="lastName"
+            inputRef={register({ required: true })}
+            error={!!errors.lastName}
+            helperText={
+              errors.lastName && (
                 <HelperText>This field is required.</HelperText>
               )
             }
@@ -117,7 +170,7 @@ const Login = (props) => {
             color="primary"
             className={classes.submit}
           >
-            เข้าสู่ระบบ
+            ลงทะเบียน
           </Button>
           <Grid container>
             <Grid item xs>
@@ -126,8 +179,8 @@ const Login = (props) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography component={Link} to="/register" variant="body2">
-                {"ลงทะเบียน"}
+              <Typography component={Link} to="/login" variant="body2">
+                {"เข้าสู่ระบบ"}
               </Typography>
             </Grid>
           </Grid>
@@ -140,4 +193,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Register;

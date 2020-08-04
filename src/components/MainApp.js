@@ -3,14 +3,15 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import PrivateRoute from "./routing/PrivateRoute";
 import Login from "./auth/Login";
+import Register from "./auth/Register";
 import Alert from "./shared/Alert";
-import AuthContext from "../context/auth/authContext";
-import UserState from "../context/users/UserState";
-
 import Home from "./home/Home";
 import User from "./users/Index";
 import UserAdd from "./users/UserAdd";
 import UserEdit from "./users/UserEdit";
+
+import AuthContext from "../context/auth/authContext";
+import UserState from "../context/users/UserState";
 
 const Specialist = () => {
   return (
@@ -41,6 +42,7 @@ const MainApp = () => {
             <PrivateRoute exact path="/user/:slug/edit" component={UserEdit} />
             <PrivateRoute exact path="/specialist" component={Specialist} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
           </Switch>
         </UserState>
       </Fragment>

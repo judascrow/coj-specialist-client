@@ -29,7 +29,7 @@ const UserState = (props) => {
     setAuthToken(localStorage.token);
 
     try {
-      const res = await axios.get("/users");
+      const res = await axios.get("/users?pageSize=250");
       dispatch({
         type: GET_USERS,
         payload: res.data.data,
