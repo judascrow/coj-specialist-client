@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.1.0",
     "axios": "^0.19.2",
     "material-table": "^1.68.0",
+    "moment": "^2.27.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

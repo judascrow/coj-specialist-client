@@ -9,17 +9,12 @@ import Home from "./home/Home";
 import User from "./users/Index";
 import UserAdd from "./users/UserAdd";
 import UserEdit from "./users/UserEdit";
+import RequestForm from "./specialist/RequestForm";
+import Specialists from "./specialist/Specialists";
+import SpecialistForm from "./specialist/SpecialistForm";
 
 import AuthContext from "../context/auth/authContext";
 import UserState from "../context/users/UserState";
-
-const Specialist = () => {
-  return (
-    <div>
-      <h1>Hello Specialist</h1>
-    </div>
-  );
-};
 
 const MainApp = () => {
   const authContext = useContext(AuthContext);
@@ -40,7 +35,13 @@ const MainApp = () => {
             <PrivateRoute exact path="/user" component={User} />
             <PrivateRoute exact path="/user/add" component={UserAdd} />
             <PrivateRoute exact path="/user/:slug/edit" component={UserEdit} />
-            <PrivateRoute exact path="/specialist" component={Specialist} />
+            <PrivateRoute exact path="/specialist" component={Specialists} />
+            <PrivateRoute exact path="/reqforms" component={RequestForm} />
+            <PrivateRoute
+              exact
+              path="/reqform-add"
+              component={SpecialistForm}
+            />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
           </Switch>

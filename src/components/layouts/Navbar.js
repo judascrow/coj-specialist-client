@@ -87,12 +87,12 @@ export default function Navbar(props) {
     props.setValue(newValue);
   };
 
-  const routes = [
+  let routes = [
     {
       name: "หน้าหลัก",
       link: "/",
       activeIndex: 0,
-      role: 0,
+      role: 1,
     },
     {
       name: "ผู้ใช้งาน",
@@ -106,12 +106,36 @@ export default function Navbar(props) {
       activeIndex: 2,
       role: 1,
     },
+    {
+      name: "คำขอขึ้นทะเบียน",
+      link: "/reqforms",
+      activeIndex: 3,
+      role: 1,
+    },
   ];
+
+  if (user?.data?.roleId === 3) {
+    routes = [
+      {
+        name: "หน้าหลัก",
+        link: "/",
+        activeIndex: 0,
+        role: 3,
+      },
+      {
+        name: "คำขอขึ้นทะเบียน",
+        link: "/reqform-add",
+        activeIndex: 1,
+        role: 3,
+      },
+    ];
+  }
 
   useEffect(() => {
     [...routes].forEach((route) => {
       var pathArray = window.location.pathname.split("/");
-      switch ("/" + pathArray[1]) {
+      const path = "/" + pathArray[1];
+      switch (path) {
         case `${route.link}`:
           if (props.value !== route.activeIndex) {
             props.setValue(route.activeIndex);
@@ -132,9 +156,7 @@ export default function Navbar(props) {
         indicatorColor="primary"
       >
         {routes
-          .filter(
-            (r) => r.role === parseInt(user?.data?.roleId) || r.role === 0
-          )
+          .filter((r) => r.role === parseInt(user?.data?.roleId))
           .map((route, index) => (
             <Tab
               key={`${route}${index}`}
