@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { getAllDistricts } from "../requests/Address";
+import { getAllSubDistricts } from "../requests/Address";
 
-const DistrictSelectOptions = ({
+const SubDistrictSelectOptions = ({
   onChange,
   value,
   placeholder,
   reactSelectID,
   isClearable,
   provinceID,
+  districtID,
   ...other
 }) => {
   const [options, setOptions] = useState([]);
@@ -16,13 +17,20 @@ const DistrictSelectOptions = ({
     value = value.value;
   }
   useEffect(() => {
-    loadDistrictsData(provinceID);
+    loadSubDistrictsData(provinceID, districtID);
     // eslint-disable-next-line
-  }, [provinceID]);
+  }, [provinceID, districtID]);
 
-  const loadDistrictsData = async (provinceID) => {
-    if (provinceID !== "" && provinceID !== undefined && provinceID != null) {
-      const result = await getAllDistricts(provinceID);
+  const loadSubDistrictsData = async (provinceID, districtID) => {
+    if (
+      provinceID !== "" &&
+      districtID !== "" &&
+      provinceID !== undefined &&
+      districtID !== undefined &&
+      provinceID !== null &&
+      districtID !== null
+    ) {
+      const result = await getAllSubDistricts(provinceID, districtID);
 
       if (result && result.data.data !== undefined) {
         const options = result.data.data.map((b) => {
@@ -55,4 +63,4 @@ const DistrictSelectOptions = ({
   );
 };
 
-export default DistrictSelectOptions;
+export default SubDistrictSelectOptions;

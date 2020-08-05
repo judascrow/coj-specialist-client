@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { getAllProvices } from "../requests/Address";
+import { getAllSplTypes } from "../requests/SplTypes";
 
-const ProvinceSelectOptions = ({
+const SplTypeSelectOptions = ({
   onChange,
   value,
   placeholder,
@@ -20,7 +20,7 @@ const ProvinceSelectOptions = ({
   }, []);
 
   const loadProvicesData = async () => {
-    const result = await getAllProvices();
+    const result = await getAllSplTypes();
 
     if (result && result.data.data !== undefined) {
       const options = result.data.data.map((b) => {
@@ -43,11 +43,10 @@ const ProvinceSelectOptions = ({
         placeholder={placeholder}
         reactSelectID={reactSelectID}
         isClearable={true}
-        maxMenuHeight={200}
         {...other}
       />
     </div>
   );
 };
 
-export default ProvinceSelectOptions;
+export default SplTypeSelectOptions;

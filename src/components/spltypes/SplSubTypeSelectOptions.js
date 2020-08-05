@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { getAllProvices } from "../requests/Address";
+import { getAllSplSubTypes } from "../requests/SplTypes";
 
-const ProvinceSelectOptions = ({
+const SplSubTypeSelectOptions = ({
   onChange,
   value,
   placeholder,
   reactSelectID,
   isClearable,
+  splTypeID,
   ...other
 }) => {
   const [options, setOptions] = useState([]);
@@ -15,22 +16,26 @@ const ProvinceSelectOptions = ({
     value = value.value;
   }
   useEffect(() => {
-    loadProvicesData();
+    loadSplSubTypesData(splTypeID);
     // eslint-disable-next-line
-  }, []);
+  }, [splTypeID]);
 
-  const loadProvicesData = async () => {
-    const result = await getAllProvices();
+  const loadSplSubTypesData = async (splTypeID) => {
+    if (splTypeID !== undefined) {
+      const result = await getAllSplSubTypes(splTypeID);
 
-    if (result && result.data.data !== undefined) {
-      const options = result.data.data.map((b) => {
-        return {
-          value: b.id,
-          label: b.nameTH,
-        };
-      });
+      if (result && result.data.data !== undefined) {
+        const options = result.data.data.map((b) => {
+          return {
+            value: b.id,
+            label: b.nameTH,
+          };
+        });
 
-      setOptions(options);
+        setOptions(options);
+      }
+    } else {
+      setOptions([]);
     }
   };
 
@@ -43,11 +48,10 @@ const ProvinceSelectOptions = ({
         placeholder={placeholder}
         reactSelectID={reactSelectID}
         isClearable={true}
-        maxMenuHeight={200}
         {...other}
       />
     </div>
   );
 };
 
-export default ProvinceSelectOptions;
+export default SplSubTypeSelectOptions;

@@ -67,7 +67,7 @@ const UserState = (props) => {
     setAuthToken(localStorage.token);
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
     };
     try {

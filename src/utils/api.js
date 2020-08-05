@@ -18,7 +18,7 @@ const api = axios.create({
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response.data.msg === "Token is not valid") {
+    if (err.response?.data?.msg === "Token is not valid") {
       const authContext = useContext(AuthContext);
       const { logout } = authContext;
       logout();
