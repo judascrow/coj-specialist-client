@@ -11,7 +11,7 @@ const ProvinceSelectOptions = ({
   ...other
 }) => {
   const [options, setOptions] = useState([]);
-  if (value.value) {
+  if (value?.value) {
     value = value.value;
   }
   useEffect(() => {

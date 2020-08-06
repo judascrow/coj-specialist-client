@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -29,7 +29,13 @@ const Home = () => {
   const classes = useStyles();
 
   const authContext = useContext(AuthContext);
-  const { user } = authContext;
+  const { user, loadUser } = authContext;
+
+  useEffect(() => {
+    loadUser();
+    // eslint-disable-next-line
+  }, []);
+
   const { username, email, firstName, lastName, roleId, role, profile } = {
     username: user?.data?.username,
     email: user?.data?.email,
@@ -78,7 +84,7 @@ const Home = () => {
                 <Typography variant="body1" gutterBottom>
                   สถานะผู้เชี่ยวชาญ :{" "}
                   {profile?.isSpecialist ? (
-                    <span>เป็นผู้เชี่ยวชาญ</span>
+                    <span className={classes.span}>เป็นผู้เชี่ยวชาญ</span>
                   ) : (
                     <span className={classes.spanDanger}>
                       ยังไม่เป็นผู้เชี่ยวชาญ
@@ -91,6 +97,10 @@ const Home = () => {
                     <span className={classes.span}>
                       {profile?.statusReqform === "checking"
                         ? "ส่งข้อมูลแล้ว รอการตรวจสอบ"
+                        : profile?.statusReqform === "verify"
+                        ? "รอยืนยันตัวตน"
+                        : profile?.statusReqform === "approved"
+                        ? "อนุมัติ"
                         : ""}
                     </span>
                   ) : (

@@ -12,9 +12,11 @@ import UserEdit from "./users/UserEdit";
 import RequestForm from "./specialist/RequestForm";
 import Specialists from "./specialist/Specialists";
 import SpecialistForm from "./specialist/SpecialistForm";
+import SpecialistFormAdmin from "./specialist/SpecialistFormAdmin";
 
 import AuthContext from "../context/auth/authContext";
 import UserState from "../context/users/UserState";
+import SpecialistState from "../context/specialist/SpecialistState";
 
 const MainApp = () => {
   const authContext = useContext(AuthContext);
@@ -30,21 +32,32 @@ const MainApp = () => {
       <Fragment>
         <Alert />
         <UserState>
-          <Switch>
-            <PrivateRoute exact path="/" component={Home} />
-            <PrivateRoute exact path="/user" component={User} />
-            <PrivateRoute exact path="/user/add" component={UserAdd} />
-            <PrivateRoute exact path="/user/:slug/edit" component={UserEdit} />
-            <PrivateRoute exact path="/specialist" component={Specialists} />
-            <PrivateRoute exact path="/reqforms" component={RequestForm} />
-            <PrivateRoute
-              exact
-              path="/reqform-add"
-              component={SpecialistForm}
-            />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-          </Switch>
+          <SpecialistState>
+            <Switch>
+              <PrivateRoute exact path="/" component={Home} />
+              <PrivateRoute exact path="/user" component={User} />
+              <PrivateRoute exact path="/user/add" component={UserAdd} />
+              <PrivateRoute
+                exact
+                path="/user/:slug/edit"
+                component={UserEdit}
+              />
+              <PrivateRoute exact path="/specialist" component={Specialists} />
+              <PrivateRoute exact path="/reqforms" component={RequestForm} />
+              <PrivateRoute
+                exact
+                path="/reqforms/:id/edit"
+                component={SpecialistFormAdmin}
+              />
+              <PrivateRoute
+                exact
+                path="/reqform-add"
+                component={SpecialistForm}
+              />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+            </Switch>
+          </SpecialistState>
         </UserState>
       </Fragment>
     </Router>

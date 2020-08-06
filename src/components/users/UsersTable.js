@@ -107,8 +107,9 @@ const UsersTable = (props) => {
     },
     (rowData) => ({
       icon: "delete",
-      iconProps: { color: "error" },
+      iconProps: { color: rowData.roleId === 1 ? "disabled" : "error" },
       tooltip: "ลบผู้ใช้งาน",
+      disabled: rowData.roleId === 1,
       onClick: (event, rowData) =>
         window.confirm("Are you sure you wish to delete this item?") &&
         onDelete(rowData),

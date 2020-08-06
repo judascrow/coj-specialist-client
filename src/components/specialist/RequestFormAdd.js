@@ -1,14 +1,17 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/th";
+import Select from "react-select";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { HOST } from "../../config";
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -50,101 +53,116 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: "middle",
     margin: theme.spacing(1),
   },
+  titleSub: {
+    color: theme.palette.success.main,
+  },
 }));
+
+const statusReqformOptions = [
+  { value: "checking", label: "ยื่นเอกสารแล้ว" },
+  { value: "verify", label: "รอยืนยันตัวตน" },
+  { value: "approved", label: "อนุมัติเป็นผู้เชี่ยวชาญ" },
+];
 
 const RequestFormAdd = (props) => {
   const classes = useStyles();
 
   let history = useHistory();
-
+  const { spData, title, edit } = props;
   const authContext = useContext(AuthContext);
   const { user } = authContext;
 
   const specialistContext = useContext(SpecialistContext);
-  const { addSpecialist } = specialistContext;
+  const { addSpecialist, updateSpecialist } = specialistContext;
 
   const { register, handleSubmit, errors, control, watch } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
-      idCard: "1234567890123",
-      govCard: "1234567890",
-      cardExpire: "2024-12-31",
-      prefixName: "นาย",
-      birthDate: "1990-04-01",
-      race: "ไทย",
-      nation: "ไทย",
+      idCard: spData?.idCard ?? "1234567890123",
+      govCard: spData?.govCard ?? "1234567890",
+      cardExpire:
+        moment(spData?.cardExpire).format("YYYY-MM-DD") ?? "2024-12-31",
+      prefixName: spData?.prefixName ?? "นาย",
+      firstName: spData?.firstName ?? user?.data?.firstName ?? "",
+      lastName: spData?.lastName ?? user?.data?.lastName ?? "",
+      birthDate: moment(spData?.birthDate).format("YYYY-MM-DD") ?? "1990-04-01",
+      race: spData?.race ?? "ไทย",
+      nation: spData?.nation ?? "ไทย",
 
-      domicileNo: "21/3",
-      domicileMoo: "4",
-      domicileSoi: "",
-      domicileRoad: "",
-      domicileProvince: 57,
-      domicileDistrict: 801,
-      domicileSubDistrict: 7114,
-      domicileZipcode: 72140,
-      domicileTel: "0822543216",
-      domicileFax: "",
-      domicileEmail: "thongchai@email.com",
-      addressNo: "1470/106",
-      addressMoo: "",
-      addressSoi: "14",
-      addressRoad: "เสนานิคม 1",
-      addressProvince: 1,
-      addressDistrict: 30,
-      addressSubDistrict: 179,
-      addressZipcode: 10900,
-      addressTel: "0822543216",
-      addressFax: "",
-      addressEmail: "thongchai@email.com",
-      contactNo: "",
-      contactMoo: "",
-      contactSoi: "",
-      contactRoad: "",
-      contactProvince: "",
-      contactDistrict: "",
-      contactSubDistrict: "",
-      contactZipcode: "",
-      contactTel: "",
-      contactFax: "",
-      contactEmail: "",
+      domicileNo: spData?.domicileNo ?? "21/3",
+      domicileMoo: spData?.domicileMoo ?? "4",
+      domicileSoi: spData?.domicileSoi ?? "",
+      domicileRoad: spData?.domicileRoad ?? "",
+      domicileProvince: spData?.domicileProvince ?? 57,
+      domicileDistrict: spData?.domicileDistrict ?? 801,
+      domicileSubDistrict: spData?.domicileSubDistrict ?? 7114,
+      domicileZipcode: spData?.domicileZipcode ?? 72140,
+      domicileTel: spData?.domicileTel ?? "0822543216",
+      domicileFax: spData?.domicileFax ?? "",
+      domicileEmail: spData?.domicileEmail ?? "thongchai@email.com",
+      addressNo: spData?.addressNo ?? "1470/106",
+      addressMoo: spData?.addressMoo ?? "",
+      addressSoi: spData?.addressSoi ?? "14",
+      addressRoad: spData?.addressRoad ?? "เสนานิคม 1",
+      addressProvince: spData?.addressProvince ?? 1,
+      addressDistrict: spData?.addressDistrict ?? 30,
+      addressSubDistrict: spData?.addressSubDistrict ?? 179,
+      addressZipcode: spData?.addressZipcode ?? 10900,
+      addressTel: spData?.addressTel ?? "0822543216",
+      addressFax: spData?.addressFax ?? "",
+      addressEmail: spData?.addressEmail ?? "thongchai@email.com",
+      contactNo: spData?.contactNo ?? "",
+      contactMoo: spData?.contactMoo ?? "",
+      contactSoi: spData?.contactSoi ?? "",
+      contactRoad: spData?.contactRoad ?? "",
+      contactProvince: spData?.contactProvince ?? "",
+      contactDistrict: spData?.contactDistrict ?? "",
+      contactSubDistrict: spData?.contactSubDistrict ?? "",
+      contactZipcode: spData?.contactZipcode ?? "",
+      contactTel: spData?.contactTel ?? "",
+      contactFax: spData?.contactFax ?? "",
+      contactEmail: spData?.contactEmail ?? "",
 
-      workOccupation: "รับราชการ",
-      workPosition: "นักวิชาการคอมพิวเตอร์ปฏิบัติการ",
-      workPlaces: "ศาลยุติธรรม",
-      workRoad: "รัชดาภิเษก",
-      workSubDistrict: 182,
-      workDistrict: 30,
-      workProvince: 1,
-      workZipcode: 10900,
-      workTel: "0822543216",
-      workFax: undefined,
-      workEmail: "thongchai@email.com",
-      bossFirstName: "เจอร์เกน",
-      bossLastName: "คล็อปป์",
-      bossNo: "111",
-      bossMoo: undefined,
-      bossSoi: undefined,
-      bossRoad: "รัชดาภิเษก",
-      bossSubDistrict: 182,
-      bossDistrict: 30,
-      bossProvince: 1,
-      bossZipcode: 10900,
-      bossTel: "0822543210",
-      bossFax: undefined,
-      bossEmail: "Klopp@email.com",
-      workExperience: "1. บ.กิฟฟารีน สกายไลน์ ยูนิตี้ จำกัด\n2. กรมบัญชีกลาง",
+      workOccupation: spData?.workOccupation ?? "รับราชการ",
+      workPosition: spData?.workPosition ?? "นักวิชาการคอมพิวเตอร์ปฏิบัติการ",
+      workPlaces: spData?.workPlaces ?? "ศาลยุติธรรม",
+      workRoad: spData?.workRoad ?? "รัชดาภิเษก",
+      workSubDistrict: spData?.workSubDistrict ?? 182,
+      workDistrict: spData?.workDistrict ?? 30,
+      workProvince: spData?.workProvince ?? 1,
+      workZipcode: spData?.workZipcode ?? 10900,
+      workTel: spData?.workTel ?? "0822543216",
+      workFax: spData?.workFax ?? undefined,
+      workEmail: spData?.workEmail ?? "thongchai@email.com",
+      bossFirstName: spData?.bossFirstName ?? "เจอร์เกน",
+      bossLastName: spData?.bossLastName ?? "คล็อปป์",
+      bossNo: spData?.bossNo ?? "111",
+      bossMoo: spData?.bossMoo ?? undefined,
+      bossSoi: spData?.bossSoi ?? undefined,
+      bossRoad: spData?.bossRoad ?? "รัชดาภิเษก",
+      bossSubDistrict: spData?.bossSubDistrict ?? 182,
+      bossDistrict: spData?.bossDistrict ?? 30,
+      bossProvince: spData?.bossProvince ?? 1,
+      bossZipcode: spData?.bossZipcode ?? 10900,
+      bossTel: spData?.bossTel ?? "0822543210",
+      bossFax: spData?.bossFax ?? undefined,
+      bossEmail: spData?.bossEmail ?? "Klopp@email.com",
+      workExperience:
+        spData?.workExperience ??
+        "1. บ.กิฟฟารีน สกายไลน์ ยูนิตี้ จำกัด\n2. กรมบัญชีกลาง",
 
-      splTypeID: 1,
-      splSubTypeID: 4,
-      regisQualification: "ปริญญาตรี",
-      regisDocument: "1. สำเนาบัตรประชาชน\n2. สำเนาทะเบียนบ้าน",
-      regisEver: "การแพทย์",
-      regisEverYear: 2560,
-      regisEverPass: null,
-      regisEverPassNo: 123456,
-      regisEverNopass: null,
-      regisEverNopassDesc: undefined,
+      splTypeID: spData?.splTypeID ?? 1,
+      splSubTypeID: spData?.splSubTypeID ?? 4,
+      regisQualification: spData?.regisQualification ?? "ปริญญาตรี",
+      regisDocument:
+        spData?.regisDocument ?? "1. สำเนาบัตรประชาชน\n2. สำเนาทะเบียนบ้าน",
+      regisEver: spData?.regisEver ?? "การแพทย์",
+      regisEverYear: spData?.regisEverYear ?? 2560,
+      regisEverPass: spData?.regisEverPass ?? null,
+      regisEverPassNo: spData?.regisEverPassNo ?? 123456,
+      regisEverNopass: spData?.regisEverNopass ?? null,
+      regisEverNopassDesc: spData?.regisEverNopassDesc ?? undefined,
     },
   });
 
@@ -160,34 +178,77 @@ const RequestFormAdd = (props) => {
   const watchBossDistrict = watch("bossDistrict");
   const watchSplTypeID = watch("splTypeID");
 
+  const [fileAttachIdcard, setFileAttachIdcard] = useState({});
+  const [fileAttachHouse, setFileAttachHouse] = useState({});
+  const [fileAttachGovCard, setFileAttachGovCard] = useState({});
+  const [fileAttachQualification, setFileAttachQualification] = useState({});
+  const onChangeFileHandler = (event) => {
+    switch (event.target.name) {
+      case "fileAttachIdcard": {
+        setFileAttachIdcard(event.target.files[0]);
+        return;
+      }
+      case "fileAttachHouse": {
+        setFileAttachHouse(event.target.files[0]);
+        return;
+      }
+      case "fileAttachGovCard": {
+        setFileAttachGovCard(event.target.files[0]);
+        return;
+      }
+      case "fileAttachQualification": {
+        setFileAttachQualification(event.target.files[0]);
+        return;
+      }
+      default:
+        return;
+    }
+  };
+
   const onSubmit = async (data) => {
     data.cardExpire = new Date(data.cardExpire).toJSON();
     data.birthDate = data.birthDate ? new Date(data.birthDate).toJSON() : null;
 
-    data.domicileProvince = data.domicileProvince?.value ?? "";
-    data.domicileDistrict = data.domicileDistrict?.value ?? "";
-    data.domicileSubDistrict = data.domicileSubDistrict?.value ?? "";
+    data.domicileProvince =
+      data.domicileProvince?.value ?? data.domicileProvince ?? "";
+    data.domicileDistrict =
+      data.domicileDistrict?.value ?? data.domicileDistrict ?? "";
+    data.domicileSubDistrict =
+      data.domicileSubDistrict?.value ?? data.domicileSubDistrict ?? "";
 
-    data.addressProvince = data.addressProvince?.value ?? "";
-    data.addressDistrict = data.addressDistrict?.value ?? "";
-    data.addressSubDistrict = data.addressSubDistrict?.value ?? "";
+    data.addressProvince =
+      data.addressProvince?.value ?? data.addressProvince ?? "";
+    data.addressDistrict =
+      data.addressDistrict?.value ?? data.addressDistrict ?? "";
+    data.addressSubDistrict =
+      data.addressSubDistrict?.value ?? data.addressSubDistrict ?? "";
 
-    data.contactProvince = data.contactProvince?.value ?? "";
-    data.contactDistrict = data.contactDistrict?.value ?? "";
-    data.contactSubDistrict = data.contactSubDistrict?.value ?? "";
+    data.contactProvince =
+      data.contactProvince?.value ?? data.contactProvince ?? "";
+    data.contactDistrict =
+      data.contactDistrict?.value ?? data.contactDistrict ?? "";
+    data.contactSubDistrict =
+      data.contactSubDistrict?.value ?? data.contactSubDistrict ?? "";
 
-    data.workProvince = data.workProvince?.value ?? "";
-    data.workDistrict = data.workDistrict?.value ?? "";
-    data.workSubDistrict = data.workSubDistrict?.value ?? "";
+    data.workProvince = data.workProvince?.value ?? data.workProvince ?? "";
+    data.workDistrict = data.workDistrict?.value ?? data.workDistrict ?? "";
+    data.workSubDistrict =
+      data.workSubDistrict?.value ?? data.workSubDistrict ?? "";
 
-    data.bossProvince = data.bossProvince?.value ?? "";
-    data.bossDistrict = data.bossDistrict?.value ?? "";
-    data.bossSubDistrict = data.bossSubDistrict?.value ?? "";
+    data.bossProvince = data.bossProvince?.value ?? data.bossProvince ?? "";
+    data.bossDistrict = data.bossDistrict?.value ?? data.bossDistrict ?? "";
+    data.bossSubDistrict =
+      data.bossSubDistrict?.value ?? data.bossSubDistrict ?? "";
 
-    data.splTypeID = data.splTypeID?.value ?? "";
-    data.splSubTypeID = data.splSubTypeID?.value ?? "";
+    data.splTypeID = data.splTypeID?.value ?? data.splTypeID ?? "";
+    data.splSubTypeID = data.splSubTypeID?.value ?? data.splSubTypeID ?? "";
 
-    console.log(data);
+    data.statusReqform = data.statusReqform?.value ?? data.statusReqform ?? "";
+
+    data.fileAttachIdcard = fileAttachIdcard;
+    data.fileAttachHouse = fileAttachHouse;
+    data.fileAttachGovCard = fileAttachGovCard;
+    data.fileAttachQualification = fileAttachQualification;
 
     const formData = new FormData();
     const reqFormDataArray = Object.keys(data);
@@ -199,9 +260,19 @@ const RequestFormAdd = (props) => {
 
       return key;
     });
-    console.log(formData);
-    await addSpecialist(formData);
-    history.push("/");
+    if (!edit) {
+      console.log("add");
+      await addSpecialist(formData);
+      history.push("/");
+    } else {
+      console.log("edit");
+      await updateSpecialist(spData?.ID, formData);
+      if (spData?.isSpecialist === true) {
+        history.push("/specialist");
+      } else {
+        history.push("/reqforms");
+      }
+    }
   };
 
   return (
@@ -209,12 +280,50 @@ const RequestFormAdd = (props) => {
       <div className={classes.root}>
         <Typography variant="h5" color="primary" gutterBottom>
           <AccountBoxIcon className={classes.titleIcon} fontSize="large" />
-          ส่งคำขอขึ้นทะเบียนเป็นผู้เชี่ยวชาญฯ
+          {title}{" "}
+          {spData && (
+            <span className={classes.titleSub}>
+              {" : " + spData?.firstName + " " + spData?.lastName}
+            </span>
+          )}
         </Typography>
         <Divider className={classes.divider} />
         <form onSubmit={handleSubmit(onSubmit)}>
           {user?.data ? (
             <div>
+              {user?.data?.roleId !== 3 ? (
+                <div>
+                  <Typography variant="h6" color="secondary" gutterBottom>
+                    สถานะการตรวจคุณสมบัติ
+                  </Typography>
+                  <Grid container spacing={1}>
+                    <Grid item xs={12} sm={6} className={classes.select}>
+                      <Controller
+                        as={Select}
+                        control={control}
+                        options={statusReqformOptions}
+                        reactSelectID={"statusReqform"}
+                        name={"statusReqform"}
+                        labelName={"สถานะการตรวจคุณสมบัติ"}
+                        onChange={([selected]) => {
+                          return selected?.value;
+                        }}
+                        defaultValue={
+                          spData?.statusReqform
+                            ? statusReqformOptions.find(
+                                (s) => s.value === spData?.statusReqform
+                              )
+                            : statusReqformOptions[0]
+                        }
+                        inputRef={register}
+                      />
+                    </Grid>{" "}
+                  </Grid>
+                  <Divider className={classes.divider} />
+                </div>
+              ) : (
+                ""
+              )}
               <Typography variant="h6" color="secondary" gutterBottom>
                 ข้อมูลส่วนตัว
               </Typography>
@@ -306,7 +415,6 @@ const RequestFormAdd = (props) => {
                     label="ชื่อ"
                     name="firstName"
                     margin="dense"
-                    defaultValue={user?.data?.firstName}
                     error={!!errors.firstName}
                     inputRef={register({ required: true })}
                     helperText={[
@@ -321,7 +429,6 @@ const RequestFormAdd = (props) => {
                     label="นามสกุล"
                     name="lastName"
                     margin="dense"
-                    defaultValue={user?.data?.lastName}
                     error={!!errors.lastName}
                     inputRef={register({ required: true })}
                     helperText={[
@@ -1518,6 +1625,144 @@ const RequestFormAdd = (props) => {
                       ),
                     ]}
                   />
+                </Grid>
+              </Grid>
+              <Divider className={classes.divider} />
+              <Typography variant="h6" color="secondary" gutterBottom>
+                เอกสารแนบ
+              </Typography>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={12}>
+                  1. สำเนาบัตรประจำตัวประชาชน
+                  {user?.data?.roleId !== 3 ? (
+                    <a
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      target="_blank"
+                      href={HOST + spData?.fileAttachIdcardURL}
+                    >
+                      <PictureAsPdfIcon
+                        fontSize="large"
+                        color="error"
+                        className={classes.titleIcon}
+                      />
+                    </a>
+                  ) : (
+                    <TextFieldCT
+                      type="file"
+                      id="fileAttachIdcard"
+                      name="fileAttachIdcard"
+                      error={!!errors.fileAttachIdcard}
+                      onChange={onChangeFileHandler}
+                      inputRef={register({
+                        // required: true,
+                      })}
+                      helperText={
+                        errors.fileAttachIdcard &&
+                        errors.fileAttachIdcard.type === "required" && (
+                          <HelperText>กรุณาเลือกไฟล์</HelperText>
+                        )
+                      }
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  2. สำเนาทะเบียนบ้าน
+                  {user?.data?.roleId !== 3 ? (
+                    <a
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      target="_blank"
+                      href={HOST + spData?.fileAttachHouseURL}
+                    >
+                      <PictureAsPdfIcon
+                        fontSize="large"
+                        color={"error"}
+                        className={classes.titleIcon}
+                      />
+                    </a>
+                  ) : (
+                    <TextFieldCT
+                      type="file"
+                      id="fileAttachHouse"
+                      name="fileAttachHouse"
+                      error={!!errors.fileAttachHouse}
+                      onChange={onChangeFileHandler}
+                      inputRef={register({
+                        // required: true,
+                      })}
+                      helperText={
+                        errors.fileAttachHouse &&
+                        errors.fileAttachHouse.type === "required" && (
+                          <HelperText>กรุณาเลือกไฟล์</HelperText>
+                        )
+                      }
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  3. สำเนาบัตรประจำตัวข้าราชการ
+                  {user?.data?.roleId !== 3 ? (
+                    <a
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      target="_blank"
+                      href={HOST + spData?.fileAttachGovCardURL}
+                    >
+                      <PictureAsPdfIcon
+                        fontSize="large"
+                        color={"error"}
+                        className={classes.titleIcon}
+                      />
+                    </a>
+                  ) : (
+                    <TextFieldCT
+                      type="file"
+                      id="fileAttachGovCard"
+                      name="fileAttachGovCard"
+                      error={!!errors.fileAttachGovCard}
+                      onChange={onChangeFileHandler}
+                      inputRef={register({
+                        // required: true,
+                      })}
+                      helperText={
+                        errors.fileAttachGovCard &&
+                        errors.fileAttachGovCard.type === "required" && (
+                          <HelperText>กรุณาเลือกไฟล์</HelperText>
+                        )
+                      }
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  4. สำเนาหนังสือแสดงคุณวุฒิ
+                  {user?.data?.roleId !== 3 ? (
+                    <a
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      target="_blank"
+                      href={HOST + spData?.fileAttachQualificationURL}
+                    >
+                      <PictureAsPdfIcon
+                        fontSize="large"
+                        color={"error"}
+                        className={classes.titleIcon}
+                      />
+                    </a>
+                  ) : (
+                    <TextFieldCT
+                      type="file"
+                      id="fileAttachQualification"
+                      name="fileAttachQualification"
+                      error={!!errors.fileAttachQualification}
+                      onChange={onChangeFileHandler}
+                      inputRef={register({
+                        // required: true,
+                      })}
+                      helperText={
+                        errors.fileAttachQualification &&
+                        errors.fileAttachQualification.type === "required" && (
+                          <HelperText>กรุณาเลือกไฟล์</HelperText>
+                        )
+                      }
+                    />
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={12}>

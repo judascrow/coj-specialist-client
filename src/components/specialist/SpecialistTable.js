@@ -19,8 +19,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   chip: {
-    color: theme.palette.success.main,
-    borderColor: theme.palette.success.main,
+    color: "white",
+    backgroundColor: theme.palette.success.main,
+    // borderColor: theme.palette.success.main,
   },
 }));
 
@@ -42,15 +43,16 @@ const SpecialistTable = (props) => {
   }, []);
 
   const onEdit = (rowData) => {
-    history.push(`/reqforms/${rowData.id}/edit`);
+    history.push(`/reqforms/${rowData.ID}/edit`);
   };
 
   const onDelete = (rowData) => {
-    deleteSpecialist(rowData.id);
+    deleteSpecialist(rowData.ID);
   };
 
   const [columns] = useState([
     { title: "เลขบัตร ปชช.", field: "idCard" },
+    // { title: "Username", field: "username" },
     {
       title: "ชื่อ - นามสกุล",
       field: "first_name",
@@ -80,8 +82,10 @@ const SpecialistTable = (props) => {
       title: "คำขอขึ้นทะเบียน",
       field: "statusReqform",
       render: (rowData) =>
-        rowData.statusReqform === "" ? (
+        rowData.statusReqform === "approved" ? (
           <Chip label="อนุมัติ" size="small" className={classes.chip} />
+        ) : rowData.statusReqform === "verify" ? (
+          <Chip label="รอยืนยันตัวตน" size="small" className={classes.chip} />
         ) : (
           <Chip label="ยื่นเอกสารแล้ว" size="small" />
         ),
@@ -95,6 +99,7 @@ const SpecialistTable = (props) => {
       tooltip: "แก้ไขข้อมูล",
       onClick: (event, rowData) => onEdit(rowData),
     },
+
     (rowData) => ({
       icon: "delete",
       iconProps: { color: "error" },

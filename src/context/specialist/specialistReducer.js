@@ -16,7 +16,7 @@ export default (state, action) => {
         ...state,
         specialists: payload,
         loading: false,
-        userData: {},
+        specialistData: {},
       };
     case ADD_SPECIALIST:
       return {

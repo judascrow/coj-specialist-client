@@ -3,7 +3,7 @@ import axios from "axios";
 import AuthContext from "../context/auth/authContext";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
+  baseURL: "http://10.1.23.213:8080/api/v1",
   headers: {
     "Content-Type": "application/json",
   },

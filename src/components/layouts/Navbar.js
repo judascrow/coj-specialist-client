@@ -114,6 +114,23 @@ export default function Navbar(props) {
     },
   ];
 
+  if (user?.data?.roleId === 2) {
+    routes = [
+      {
+        name: "ผู้เชี่ยวชาญ",
+        link: "/specialist",
+        activeIndex: 0,
+        role: 2,
+      },
+      {
+        name: "คำขอขึ้นทะเบียน",
+        link: "/reqforms",
+        activeIndex: 1,
+        role: 2,
+      },
+    ];
+  }
+
   if (user?.data?.roleId === 3) {
     routes = [
       {
