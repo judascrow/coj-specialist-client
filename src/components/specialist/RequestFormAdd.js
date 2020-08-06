@@ -178,10 +178,10 @@ const RequestFormAdd = (props) => {
   const watchBossDistrict = watch("bossDistrict");
   const watchSplTypeID = watch("splTypeID");
 
-  const [fileAttachIdcard, setFileAttachIdcard] = useState({});
-  const [fileAttachHouse, setFileAttachHouse] = useState({});
-  const [fileAttachGovCard, setFileAttachGovCard] = useState({});
-  const [fileAttachQualification, setFileAttachQualification] = useState({});
+  const [fileAttachIdcard, setFileAttachIdcard] = useState("");
+  const [fileAttachHouse, setFileAttachHouse] = useState("");
+  const [fileAttachGovCard, setFileAttachGovCard] = useState("");
+  const [fileAttachQualification, setFileAttachQualification] = useState("");
   const onChangeFileHandler = (event) => {
     switch (event.target.name) {
       case "fileAttachIdcard": {

@@ -88,6 +88,7 @@ const UserState = (props) => {
 
   // Delete Contact
   const deleteSpecialist = async (id) => {
+    setAuthToken(localStorage.token);
     try {
       await axios.delete(`/reqforms/${id}`);
 

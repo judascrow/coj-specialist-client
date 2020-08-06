@@ -40,10 +40,12 @@ export default (state, action) => {
         loading: false,
       };
     case DELETE_SPECIALIST:
+      console.log(state.specialists);
+      console.log("payload=" + payload);
       return {
         ...state,
         specialists: state.specialists.filter(
-          (specialist) => specialist.id !== payload
+          (specialist) => specialist.ID !== payload
         ),
         loading: false,
       };
