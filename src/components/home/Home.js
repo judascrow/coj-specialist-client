@@ -48,74 +48,78 @@ const Home = () => {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              สวัสดีคุณ {user?.data?.firstName + " " + user?.data?.lastName}
-            </Typography>
-            <Divider className={classes.divider} />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <div>
-              <Typography variant="subtitle2" color="primary" gutterBottom>
-                ข้อมูลทั่วไป
+      {username ? (
+        <div className={classes.root}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h5" gutterBottom>
+                สวัสดีคุณ {user?.data?.firstName + " " + user?.data?.lastName}
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                ชื่อผู้ใช้งาน : {username}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                สิทธิ์การใช้งาน : {role?.nameTh}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                ชื่อ-สกุล : {firstName + " " + lastName}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                อีเมล์ : {email}
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            {roleId === 3 ? (
+              <Divider className={classes.divider} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <div>
                 <Typography variant="subtitle2" color="primary" gutterBottom>
-                  ข้อมูลผู้เชี่ยวชาญ
+                  ข้อมูลทั่วไป
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  สถานะผู้เชี่ยวชาญ :{" "}
-                  {profile?.isSpecialist ? (
-                    <span className={classes.span}>เป็นผู้เชี่ยวชาญ</span>
-                  ) : (
-                    <span className={classes.spanDanger}>
-                      ยังไม่เป็นผู้เชี่ยวชาญ
-                    </span>
-                  )}
+                  ชื่อผู้ใช้งาน : {username}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  สถานะการขึ้นทะเบียน :{" "}
-                  {profile ? (
-                    <span className={classes.span}>
-                      {profile?.statusReqform === "checking"
-                        ? "ส่งข้อมูลแล้ว รอการตรวจสอบ"
-                        : profile?.statusReqform === "verify"
-                        ? "รอยืนยันตัวตน"
-                        : profile?.statusReqform === "approved"
-                        ? "อนุมัติ"
-                        : ""}
-                    </span>
-                  ) : (
-                    <span className={classes.spanDanger}>
-                      ยังไม่ได้ยื่นคำขอขึ้นทะเบียน
-                    </span>
-                  )}
+                  สิทธิ์การใช้งาน : {role?.nameTh}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  ชื่อ-สกุล : {firstName + " " + lastName}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  อีเมล์ : {email}
                 </Typography>
               </div>
-            ) : (
-              ""
-            )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              {roleId === 3 ? (
+                <div>
+                  <Typography variant="subtitle2" color="primary" gutterBottom>
+                    ข้อมูลผู้เชี่ยวชาญ
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    สถานะผู้เชี่ยวชาญ :{" "}
+                    {profile?.isSpecialist ? (
+                      <span className={classes.span}>เป็นผู้เชี่ยวชาญ</span>
+                    ) : (
+                      <span className={classes.spanDanger}>
+                        ยังไม่เป็นผู้เชี่ยวชาญ
+                      </span>
+                    )}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    สถานะการขึ้นทะเบียน :{" "}
+                    {profile ? (
+                      <span className={classes.span}>
+                        {profile?.statusReqform === "checking"
+                          ? "ส่งข้อมูลแล้ว รอการตรวจสอบ"
+                          : profile?.statusReqform === "verify"
+                          ? "รอยืนยันตัวตน"
+                          : profile?.statusReqform === "approved"
+                          ? "อนุมัติ"
+                          : ""}
+                      </span>
+                    ) : (
+                      <span className={classes.spanDanger}>
+                        ยังไม่ได้ยื่นคำขอขึ้นทะเบียน
+                      </span>
+                    )}
+                  </Typography>
+                </div>
+              ) : (
+                ""
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
+        </div>
+      ) : (
+        ""
+      )}
     </Fragment>
   );
 };
