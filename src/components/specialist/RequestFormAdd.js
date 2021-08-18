@@ -362,7 +362,15 @@ const RequestFormAdd = (props) => {
                     name="govCard"
                     label="เลขบัตรประจำตัวข้าราชการ"
                     margin="dense"
-                    inputRef={register}
+                    error={!!errors.govCard}
+                    inputRef={register({
+                      //required: true,
+                    })}
+                    helperText={[
+                      errors.govCard?.type === "required" && (
+                        <HelperText key={1}>This field is required.</HelperText>
+                      ),
+                    ]}
                   />
                 </Grid>
 
@@ -385,7 +393,7 @@ const RequestFormAdd = (props) => {
                       //required: true,
                     })}
                     helperText={[
-                      errors.idCard?.type === "required" && (
+                      errors.cardExpire?.type === "required" && (
                         <HelperText key={1}>This field is required.</HelperText>
                       ),
                     ]}
@@ -398,7 +406,7 @@ const RequestFormAdd = (props) => {
                     margin="dense"
                     error={!!errors.prefixName}
                     inputRef={register({
-                      // required: true
+                      required: true,
                     })}
                     helperText={[
                       errors.prefixName?.type === "required" && (
@@ -467,7 +475,7 @@ const RequestFormAdd = (props) => {
                     margin="dense"
                     error={!!errors.race}
                     inputRef={register({
-                      // required: true
+                      required: true,
                     })}
                     helperText={[
                       errors.race?.type === "required" && (
@@ -483,7 +491,7 @@ const RequestFormAdd = (props) => {
                     margin="dense"
                     error={!!errors.nation}
                     inputRef={register({
-                      // required: true
+                      required: true,
                     })}
                     helperText={[
                       errors.nation?.type === "required" && (
@@ -505,7 +513,7 @@ const RequestFormAdd = (props) => {
                     margin="dense"
                     error={!!errors.domicileNo}
                     inputRef={register({
-                      // required: true
+                      // required: true,
                     })}
                     helperText={[
                       errors.domicileNo?.type === "required" && (
@@ -1651,7 +1659,7 @@ const RequestFormAdd = (props) => {
                       error={!!errors.fileAttachIdcard}
                       onChange={onChangeFileHandler}
                       inputRef={register({
-                        // required: true,
+                        required: true,
                       })}
                       helperText={
                         errors.fileAttachIdcard &&
@@ -1684,7 +1692,7 @@ const RequestFormAdd = (props) => {
                       error={!!errors.fileAttachHouse}
                       onChange={onChangeFileHandler}
                       inputRef={register({
-                        // required: true,
+                        required: true,
                       })}
                       helperText={
                         errors.fileAttachHouse &&
@@ -1717,7 +1725,7 @@ const RequestFormAdd = (props) => {
                       error={!!errors.fileAttachGovCard}
                       onChange={onChangeFileHandler}
                       inputRef={register({
-                        // required: true,
+                        //required: true,
                       })}
                       helperText={
                         errors.fileAttachGovCard &&
@@ -1750,7 +1758,7 @@ const RequestFormAdd = (props) => {
                       error={!!errors.fileAttachQualification}
                       onChange={onChangeFileHandler}
                       inputRef={register({
-                        // required: true,
+                        required: true,
                       })}
                       helperText={
                         errors.fileAttachQualification &&

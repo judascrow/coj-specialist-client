@@ -107,7 +107,11 @@ const Register = (props) => {
             type="password"
             label="Password"
             name="password"
-            inputRef={register({ required: true })}
+            inputRef={register({
+              required: true,
+              minLength: 6,
+              maxLength: 20,
+            })}
             error={!!errors.password}
             helperText={[
               errors.password?.type === "required" && (
