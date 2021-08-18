@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./routing/PrivateRoute";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import List from "./auth/List";
 import Alert from "./shared/Alert";
 import Home from "./home/Home";
 import User from "./users/Index";
@@ -56,6 +57,7 @@ const MainApp = () => {
               />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route exact path="/list" component={List} />
             </Switch>
           </SpecialistState>
         </UserState>

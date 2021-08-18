@@ -121,8 +121,8 @@ const Login = (props) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Typography component={Link} to="#" variant="body2">
-                {/* ลืมรหัสผ่าน? */}
+              <Typography component={Link} to="/list" variant="body2">
+                {"รายชื่อผู้เชี่ยวชาญ"}
               </Typography>
             </Grid>
             <Grid item>

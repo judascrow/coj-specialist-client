@@ -117,15 +117,21 @@ export default function Navbar(props) {
   if (user?.data?.roleId === 2) {
     routes = [
       {
+        name: "หน้าหลัก",
+        link: "/",
+        activeIndex: 0,
+        role: 2,
+      },
+      {
         name: "ผู้เชี่ยวชาญ",
         link: "/specialist",
-        activeIndex: 0,
+        activeIndex: 1,
         role: 2,
       },
       {
         name: "คำขอขึ้นทะเบียน",
         link: "/reqforms",
-        activeIndex: 1,
+        activeIndex: 2,
         role: 2,
       },
     ];
